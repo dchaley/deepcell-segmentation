@@ -13,6 +13,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
     apt-get update -y && apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends git google-cloud-sdk google-cloud-cli pigz python3.10 python3-pip python3-dev python3.10-distutils && \
+    apt-get remove -y python3.11 && \
     rm -rf /var/lib/apt/lists/* && \
     python3.10 -m pip install --no-cache-dir --upgrade pip && \
     gcloud config set storage/parallel_composite_upload_enabled True
