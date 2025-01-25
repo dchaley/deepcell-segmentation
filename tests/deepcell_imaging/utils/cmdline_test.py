@@ -1,10 +1,17 @@
+import argparse
+
 import pytest
 import sys
 from unittest.mock import ANY, patch
 
 from pydantic import BaseModel, Field
 
-from deepcell_imaging.utils.cmdline import get_task_arguments, parse_compute_config
+from deepcell_imaging.utils.cmdline import (
+    get_task_arguments,
+    parse_compute_config,
+    add_dataset_parameters,
+    get_dataset_paths,
+)
 
 
 class ArgsForTest(BaseModel):
@@ -37,6 +44,42 @@ def test_argv_parsing():
         "reports_path": "gs://bucket/reports",
         "image_filter": "",
     }
+
+
+def test_dataset_parsing():
+    parser = argparse.ArgumentParser("test")
+    add_dataset_parameters(parser, require_measurement_parameters=True)
+
+    test_path_args = [
+        "prog",
+        "paths",
+        "--images_path",
+        "gs://bucket/root/images-dir",
+        "--segmasks_path",
+        "gs://bucket/root/SEGMASK",
+        "--numpy_path",
+        "gs://bucket/root/NPZ_INTERMEDIATE",
+        "--project_path",
+        "gs://bucket/root/PROJ",
+        "--reports_path",
+        "gs://bucket/root/REPORTS",
+    ]
+    with patch.object(sys, "argv", test_path_args):
+        args = parser.parse_args()
+        explicit_paths = get_dataset_paths(args)
+
+    test_workspace_args = [
+        "prog",
+        "workspace",
+        "gs://bucket/root/",
+        "--images_subdir",
+        "images-dir",
+    ]
+    with patch.object(sys, "argv", test_workspace_args):
+        args = parser.parse_args()
+        workspace_paths = get_dataset_paths(args)
+
+    assert dict(explicit_paths) == dict(workspace_paths)
 
 
 def test_tasks_uri():
