@@ -94,8 +94,8 @@ def main():
     ]
 
     logger.info("Finding matching npz files")
-
     npz_paths = get_blob_filenames(dataset_paths["npz_root"], client=client)
+
     image_segmentation_tasks = list(
         make_segmentation_tasks(
             image_paths,

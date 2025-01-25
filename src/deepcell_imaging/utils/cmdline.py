@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 from typing import TypeVar, Type
 
 import smart_open
@@ -133,11 +134,11 @@ def add_dataset_parameters(
 
 def get_dataset_paths(args) -> dict:
     if args.mode == "workspace":
-        image_root = f"{args.dataset_path}/{args.images_subdir}"
-        npz_root = f"{args.dataset_path}/{args.npz_subdir}"
-        masks_output_root = f"{args.dataset_path}/{args.segmasks_subdir}"
-        project_root = f"{args.dataset_path}/{args.project_subdir}"
-        reports_root = f"{args.dataset_path}/{args.reports_subdir}"
+        image_root = os.path.join(args.dataset_path, args.images_subdir)
+        npz_root = os.path.join(args.dataset_path, args.npz_subdir)
+        masks_output_root = os.path.join(args.dataset_path, args.segmasks_subdir)
+        project_root = os.path.join(args.dataset_path, args.project_subdir)
+        reports_root = os.path.join(args.dataset_path, args.reports_subdir)
     elif args.mode == "paths":
         image_root = args.images_path
         npz_root = args.numpy_path
