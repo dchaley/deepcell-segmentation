@@ -21,7 +21,7 @@ jupyter<2
 matplotlib
 opencv-python-headless<5
 pandas
-protobuf==3.20.3
+protobuf==5.29.6
 pydot<2
 scikit-image>=0.19.3
 scikit-learn
